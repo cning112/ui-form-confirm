@@ -25,8 +25,6 @@ export const ConfirmationDialog = <T extends FieldValues>(
 ) => {
     const { open, onClose, options, onCancel, onConfirm, formProps } = props;
 
-    console.log("form defaultvalues", formProps?.defaultValues);
-
     const formMethods = useForm({
         defaultValues: formProps?.defaultValues ?? {},
         mode: "onChange",
@@ -38,10 +36,12 @@ export const ConfirmationDialog = <T extends FieldValues>(
 
     const formContent = formProps ? (
         <FormProvider {...formMethods}>
-            <Form fields={formProps.fields} />
+            <Form fields={formProps.fields} stackProps={formProps.stackProps} />
         </FormProvider>
-    ) : (
+    ) : options?.description ? (
         <DialogContentText>{options.descriptions}</DialogContentText>
+    ) : (
+        <></>
     );
 
     const dialogActions = options.buttonOrder.map((buttonType) => {

@@ -88,8 +88,10 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
     const { children, defaultOptions } = props;
 
     const [count, setCount] = useState(0);
-    const [uiOptions, setUiOptions] = useState<PartialConfirmOptions>();
-    const [formProps, setFormProps] = useState<FormProps<T>>();
+    const [uiOptions, setUiOptions] = useState<
+        PartialConfirmOptions | undefined
+    >();
+    const [formProps, setFormProps] = useState<FormProps<T> | undefined>();
 
     const [{ resolve, reject }, setResolveReject] = useState<{
         resolve?: Dispatch<PromiseLike<T> | T>;
@@ -98,7 +100,6 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
 
     const confirm = useCallback(
         (ui: PartialConfirmOptions, form: FormProps<T>) => {
-            console.log("confirm????", ui, form);
             setCount((c) => c + 1);
             return new Promise<T>((resolve, reject) => {
                 setUiOptions(ui);
@@ -115,8 +116,8 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
 
     const handleClose = useCallback(() => {
         setResolveReject({});
-        setUiOptions();
-        setFormProps();
+        setUiOptions(undefined);
+        setFormProps(undefined);
     }, []);
 
     const handleCancel = useCallback(() => {

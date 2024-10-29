@@ -6,6 +6,7 @@ import {
 } from "react-hook-form";
 import {
     Stack,
+    StackProps,
     TextField,
     TextFieldProps,
     Tooltip,
@@ -15,6 +16,7 @@ import _ from "lodash";
 
 export interface FormProps<T extends FieldValues> {
     defaultValues: T;
+    stackProps?: StackProps;
     fields: Record<
         FieldPath<T>,
         {
@@ -24,14 +26,12 @@ export interface FormProps<T extends FieldValues> {
     >;
 }
 
-export const Form = <T extends FieldValues>(
-    props: Pick<FormProps<T>, "fields">
-) => {
-    const { fields } = props;
+export const Form = <T extends FieldValues>(props: FormProps<T>) => {
+    const { fields, stackProps } = props;
     const { control } = useFormContext();
 
     return (
-        <Stack spacing={1}>
+        <Stack {...stackProps}>
             {_.map(
                 fields,
                 ({ componentProps, tooltipProps = { title: "" } }, key) => (

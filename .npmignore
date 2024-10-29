@@ -1,0 +1,13 @@
+src/
+tests/
+.vscode/
+.env
+node_modules/
+*.log
+
+tsconfig.json
+.eslintrc.*
+.prettierrc
+package-lock.json
+
+!.dist/
