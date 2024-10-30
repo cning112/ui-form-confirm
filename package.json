@@ -14,17 +14,15 @@
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
         "@fontsource/roboto": "^5.0.1",
-        "@mui/icons-material": "^5.11.16",
-        "@mui/material": "^5.13.2",
-        "lodash": "^4.17.21",
+        "@mui/icons-material": "^6.1.5",
+        "@mui/material": "^6.1.5",
         "material-ui-confirm": "^3.0.9",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.43.9"
     },
     "devDependencies": {
-        "@types/lodash": "^4.14.195",
-        "@types/react": "^18.0.28",
+        "@types/react": "^18.3.12",
         "@types/react-dom": "^18.0.11",
         "@typescript-eslint/eslint-plugin": "^8.12.2",
         "@typescript-eslint/parser": "^8.12.2",
@@ -38,7 +36,7 @@
         "lint-staged": "^13.2.2",
         "prettier": "^2.8.8",
         "sass": "^1.62.1",
-        "typescript": "^5.0.2",
+        "typescript": "^5.6.3",
         "vite": "^4.3.2"
     },
     "lint-staged": {
@@ -48,6 +46,7 @@
         "trailingComma": "es5",
         "tabWidth": 4,
         "semi": true,
-        "singleQuote": false
+        "singleQuote": false,
+        "printWidth": 120
     }
 }

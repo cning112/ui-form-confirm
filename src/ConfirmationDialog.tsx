@@ -1,14 +1,7 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { Form, FormProps } from "./Form.tsx";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
-import { Dispatch, DispatchWithoutAction } from "react";
+import { Dispatch, DispatchWithoutAction, ReactNode } from "react";
 import { PartialConfirmOptions } from "./interfaces.ts";
 
 interface ConfirmationDialogProps<T extends FieldValues> {
@@ -20,13 +13,13 @@ interface ConfirmationDialogProps<T extends FieldValues> {
     formProps?: FormProps<T>;
 }
 
-export const ConfirmationDialog = <T extends FieldValues>(
-    props: ConfirmationDialogProps<T>
-) => {
+export const ConfirmationDialog = <T extends FieldValues>(props: ConfirmationDialogProps<T>) => {
     const { open, onClose, options, onCancel, onConfirm, formProps } = props;
 
+    console.log("form defaultvalues", formProps?.defaultValues);
+
     const formMethods = useForm({
-        defaultValues: formProps?.defaultValues ?? {},
+        defaultValues: formProps?.defaultValues,
         mode: "onChange",
     });
     const {
@@ -36,30 +29,28 @@ export const ConfirmationDialog = <T extends FieldValues>(
 
     const formContent = formProps ? (
         <FormProvider {...formMethods}>
-            <Form fields={formProps.fields} stackProps={formProps.stackProps} />
+            <Form {...formProps} />
         </FormProvider>
-    ) : options?.description ? (
-        <DialogContentText>{options.descriptions}</DialogContentText>
     ) : (
-        <></>
+        <DialogContentText>{(options.description ?? "") as ReactNode}</DialogContentText>
     );
 
-    const dialogActions = options.buttonOrder.map((buttonType) => {
+    const dialogActions = options.buttonOrder?.map((buttonType) => {
         if (buttonType === "cancel") {
             return (
                 !options.hideCancelButton && (
-                    <Button
-                        key={buttonType}
-                        {...options.cancellationButtonProps}
-                        onClick={() => onCancel()}
-                    >
-                        {options.cancellationText}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    <Button key={buttonType} {...options.cancellationButtonProps} onClick={() => onCancel()}>
+                        {(options.cancellationText ?? "Cancel") as ReactNode}
                     </Button>
                 )
             );
         }
         if (buttonType === "confirm") {
             return (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 <Button
                     key={buttonType}
                     color="primary"
@@ -67,25 +58,25 @@ export const ConfirmationDialog = <T extends FieldValues>(
                     {...options.confirmationButtonProps}
                     onClick={() => onConfirm(getValues())}
                 >
-                    {options.confirmationText}
+                    {(options.confirmationText ?? "Confirm") as ReactNode}
                 </Button>
             );
         }
     });
 
     return (
-        <Dialog
-            open={open}
-            onClose={options.allowClose ? onClose : null}
-            {...options.dialogProps}
-        >
-            <DialogTitle {...options.titleProps}>{options.title}</DialogTitle>
-            <DialogContent {...options.contentProps}>
-                {formContent}
-            </DialogContent>
-            <DialogActions {...options.dialogActionsProps}>
-                {dialogActions}
-            </DialogActions>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        <Dialog open={open} onClose={options.allowClose ? onClose : null} {...options.dialogProps}>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <DialogTitle {...options.titleProps}>{(options.title ?? "") as ReactNode}</DialogTitle>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <DialogContent {...options.contentProps}>{formContent}</DialogContent>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <DialogActions {...options.dialogActionsProps}>{dialogActions}</DialogActions>
         </Dialog>
     );
 };

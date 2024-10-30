@@ -6,7 +6,7 @@
         "skipLibCheck": true,
         "baseUrl": ".",
         "paths": {
-          "ui-form-confirm": ["./src/index.ts"]
+          "ui-form-confirm": ["./src/index.tsx"]
         },
 
         /* Bundler mode */

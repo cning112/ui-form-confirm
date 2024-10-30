@@ -1,21 +1,8 @@
-import {
-    Controller,
-    FieldPath,
-    FieldValues,
-    useFormContext,
-} from "react-hook-form";
-import {
-    Stack,
-    StackProps,
-    TextField,
-    TextFieldProps,
-    Tooltip,
-    TooltipProps,
-} from "@mui/material";
-import _ from "lodash";
+import { Controller, DeepPartial, FieldPath, FieldValues, useFormContext } from "react-hook-form";
+import { Stack, StackProps, TextField, TextFieldProps, Tooltip, TooltipProps } from "@mui/material";
 
 export interface FormProps<T extends FieldValues> {
-    defaultValues: T;
+    defaultValues: DeepPartial<T>;
     stackProps?: StackProps;
     fields: Record<
         FieldPath<T>,
@@ -32,9 +19,9 @@ export const Form = <T extends FieldValues>(props: FormProps<T>) => {
 
     return (
         <Stack {...stackProps}>
-            {_.map(
-                fields,
-                ({ componentProps, tooltipProps = { title: "" } }, key) => (
+            {Object.keys(fields).map((key) => {
+                const { componentProps, tooltipProps = { title: "" } } = fields[key as FieldPath<T>];
+                return (
                     <Tooltip {...tooltipProps} key={key}>
                         <>
                             <Controller
@@ -44,17 +31,15 @@ export const Form = <T extends FieldValues>(props: FormProps<T>) => {
                                     <TextField
                                         label={key}
                                         value={value ?? ""}
-                                        onChange={(e) =>
-                                            onChange(e.target.value)
-                                        }
+                                        onChange={(e) => onChange(e.target.value)}
                                         {...componentProps}
                                     />
                                 )}
                             />
                         </>
                     </Tooltip>
-                )
-            )}
+                );
+            })}
         </Stack>
     );
 };
