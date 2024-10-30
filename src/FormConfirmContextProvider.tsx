@@ -1,11 +1,4 @@
-import {
-    Dispatch,
-    Fragment,
-    ReactNode,
-    useCallback,
-    useMemo,
-    useState,
-} from "react";
+import { Dispatch, Fragment, ReactNode, useCallback, useMemo, useState } from "react";
 import { FormConfirmContext } from "./useFormConfirmContext.ts";
 import { FieldValues } from "react-hook-form";
 import { ConfirmationDialog } from "./ConfirmationDialog.tsx";
@@ -30,27 +23,21 @@ const DEFAULT_OPTIONS = {
     buttonOrder: ["cancel", "confirm"],
 };
 
-const buildOptions = (
-    defaultOptions: PartialConfirmOptions,
-    options: PartialConfirmOptions
-): PartialConfirmOptions => {
+const buildOptions = (defaultOptions: PartialConfirmOptions, options: PartialConfirmOptions): PartialConfirmOptions => {
     const dialogProps = {
         ...(defaultOptions.dialogProps || DEFAULT_OPTIONS.dialogProps),
         ...(options.dialogProps || {}),
     };
     const dialogActionsProps = {
-        ...(defaultOptions.dialogActionsProps ||
-            DEFAULT_OPTIONS.dialogActionsProps),
+        ...(defaultOptions.dialogActionsProps || DEFAULT_OPTIONS.dialogActionsProps),
         ...(options.dialogActionsProps || {}),
     };
     const confirmationButtonProps = {
-        ...(defaultOptions.confirmationButtonProps ||
-            DEFAULT_OPTIONS.confirmationButtonProps),
+        ...(defaultOptions.confirmationButtonProps || DEFAULT_OPTIONS.confirmationButtonProps),
         ...(options.confirmationButtonProps || {}),
     };
     const cancellationButtonProps = {
-        ...(defaultOptions.cancellationButtonProps ||
-            DEFAULT_OPTIONS.cancellationButtonProps),
+        ...(defaultOptions.cancellationButtonProps || DEFAULT_OPTIONS.cancellationButtonProps),
         ...(options.cancellationButtonProps || {}),
     };
     const titleProps = {
@@ -62,8 +49,7 @@ const buildOptions = (
         ...(options.contentProps || {}),
     };
     const confirmationKeywordTextFieldProps = {
-        ...(defaultOptions.confirmationKeywordTextFieldProps ||
-            DEFAULT_OPTIONS.confirmationKeywordTextFieldProps),
+        ...(defaultOptions.confirmationKeywordTextFieldProps || DEFAULT_OPTIONS.confirmationKeywordTextFieldProps),
         ...(options.confirmationKeywordTextFieldProps || {}),
     };
 
@@ -88,9 +74,7 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
     const { children, defaultOptions } = props;
 
     const [count, setCount] = useState(0);
-    const [uiOptions, setUiOptions] = useState<
-        PartialConfirmOptions | undefined
-    >();
+    const [uiOptions, setUiOptions] = useState<PartialConfirmOptions | undefined>();
     const [formProps, setFormProps] = useState<FormProps<T> | undefined>();
 
     const [{ resolve, reject }, setResolveReject] = useState<{
@@ -98,17 +82,14 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
         reject?: (reason?: unknown) => void;
     }>({});
 
-    const confirm = useCallback(
-        (ui: PartialConfirmOptions, form: FormProps<T>) => {
-            setCount((c) => c + 1);
-            return new Promise<T>((resolve, reject) => {
-                setUiOptions(ui);
-                setFormProps(form);
-                setResolveReject({ resolve, reject });
-            });
-        },
-        []
-    );
+    const confirm = useCallback((uiOptions: PartialConfirmOptions, formProps: FormProps<T>) => {
+        setCount((c) => c + 1);
+        return new Promise<T>((resolve, reject) => {
+            setUiOptions(uiOptions);
+            setFormProps(formProps);
+            setResolveReject({ resolve, reject });
+        });
+    }, []);
 
     const builtOptions = useMemo(() => {
         return buildOptions(defaultOptions ?? {}, uiOptions ?? {});
@@ -141,9 +122,9 @@ export const FormConfirmProvider = <T extends FieldValues>(props: {
 
     return (
         <Fragment>
-            <FormConfirmContext.Provider value={{ confirm }}>
-                {children}
-            </FormConfirmContext.Provider>
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <FormConfirmContext.Provider value={{ confirm }}>{children}</FormConfirmContext.Provider>
             {!!resolve && (
                 <ConfirmationDialog
                     key={count}

@@ -4,22 +4,15 @@ import { PartialConfirmOptions } from "./interfaces.ts";
 import { FormProps } from "./Form.tsx";
 
 interface FormConfirmContextType<T extends FieldValues> {
-    confirm: (
-        uiOptions: PartialConfirmOptions,
-        formProps: FormProps<T>
-    ) => Promise<T>;
+    confirm: (uiOptions: PartialConfirmOptions, formProps: FormProps<T>) => Promise<T>;
 }
 
-export const FormConfirmContext = createContext<
-    FormConfirmContextType<unknwon> | undefined
->(undefined);
+export const FormConfirmContext = createContext<FormConfirmContextType<FieldValues> | undefined>(undefined);
 
 export const useFormConfirmContext = () => {
     const context = useContext(FormConfirmContext);
     if (context === undefined) {
-        throw new Error(
-            "useFormConfirmContext can only be used inside FormConfirmContext.Provider"
-        );
+        throw new Error("useFormConfirmContext can only be used inside FormConfirmContext.Provider");
     }
     return context;
 };
